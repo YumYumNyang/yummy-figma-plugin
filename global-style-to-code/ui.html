@@ -1,0 +1,161 @@
+<style>
+  *{
+    background-color: #000;
+    color: #fff;
+  }
+  #code {
+    border: 1px solid rgb(47, 0, 255);
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+  }
+  .check-box{
+    margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .input-box{
+    display: flex;
+    margin-top: 12px;
+    align-items: center;
+  }
+  .button-box{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+  button{
+    background-color: rgb(47, 0, 255);
+    width: 150px;
+    height: 40px;
+    outline: none;
+    font-size: 16px;
+    margin: 12px;
+    border: 1px solid #fff;
+    cursor: pointer;
+  }
+  #toast{
+    z-index: 999999;
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    margin-left: -80px;
+    opacity: 0;
+    width: 160px;
+    height: 48px;
+    background-color: #000;
+    transition: all 0.2s ease;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+</style>
+<h2>Global Style to Code!</h2>
+<textarea id="code">
+</textarea>
+<div class="button-box">
+  <button type="button" id="copy">Copy to Clip Board</button>
+  <button type="button" id="cancel">Cancel</button>
+</div>
+<div class="check-box">
+  <h3>code options</h3>
+  <div class="input-box">
+    <select id="mode">
+      <option value="object" selected>object style</option>
+      <option value="css">css style</option>
+    </select>
+  </div>
+</div>
+<div class="check-box">
+  <h3>options</h3>
+  <div class="input-box">
+    <input type="checkbox" name="text-style"/>  
+    <label for="text-style">text style</label>
+    <input type="checkbox" name="paint-style"/> 
+    <label for="paint-style">paint style</label>
+    <input type="checkbox" name="effect-style"/>
+    <label for="effect-style">effect style</label>
+  </div>
+</div>
+<div class="check-box">
+  <h3>paint options</h3>
+  <div class="input-box">
+    <label for="RGB">
+      <input type="radio" id="RGB"
+      name="RGB" value="RGB">RGB</label>
+    <label for="HEX">
+      <input type="radio" id="HEX"
+    name="HEX" value="HEX">HEX</label>
+        <label for="CSS"><input type="radio" id="CSS"
+          name="CSS" value="CSS">
+      CSS</label>
+    <label for="HSL">
+      <input type="radio" id="HSL"
+    name="HSL" value="HSL">HSL</label>
+    <label for="HSB">
+      <input type="radio" id="HSB"
+    name="HSB" value="HSB">HSB</label>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+onmessage = (event) => {
+  document.getElementById('code').value = event.data.pluginMessage;
+}
+
+document.querySelectorAll('input').forEach(el => el.addEventListener('click', (e) => {
+  parent.postMessage({ pluginMessage: {type: e.target.name}},"*");
+}));
+
+document.getElementById('mode').onchange = (e) =>{
+  parent.postMessage({ pluginMessage: {type: e.target.value}},"*");
+};
+
+document.getElementById('copy').onclick = () => {
+  copyTextToClipboard();
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+}
+
+function copyTextToClipboard() {
+  const text = document.getElementById('code').value;
+  const textArea = document.createElement("textarea");
+  const toast = document.getElementById('toast');
+  
+  textArea.value = text;
+  
+  textArea.style.top = "0";
+  textArea.style.left = "0";
+  textArea.style.position = "fixed";
+
+  document.body.appendChild(textArea);
+  
+  textArea.focus();
+  textArea.select();
+
+  try {
+    const successful = document.execCommand('copy');
+    const msg = successful ? 'successful' : 'unsuccessful';
+    console.log('copy' + msg);
+
+    toast.style.opacity = 1;
+    toast.innerHTML = 'copy ' + msg + " :)";
+    setTimeout(() => {
+      toast.style.opacity = 0; 
+    }, 1000);
+
+  } catch (err) {
+    toast.style.opacity = 1;
+    toast.innerHTML = "copy error :(";
+    
+    console.error(err);
+  }
+  document.body.removeChild(textArea);
+}
+
+</script>
