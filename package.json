@@ -1,0 +1,27 @@
+{
+	"name": "yummy-figma-plugin",
+	"version": "1.0.0",
+	"description": "figma plugin for better developer experience",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/YumYumNyang/yummy-figma-plugin.git"
+	},
+	"keywords": [
+		"figma",
+		"plugin"
+	],
+	"author": "hyewon kwak",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/YumYumNyang/yummy-figma-plugin/issues"
+	},
+	"homepage": "https://github.com/YumYumNyang/yummy-figma-plugin#readme",
+	"devDependencies": {
+		"@figma/plugin-typings": "^1.50.0",
+		"prettier": "^2.7.1"
+	}
+}
