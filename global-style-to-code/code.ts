@@ -86,7 +86,7 @@ function parsePaintStyle(arr: PaintStyle[], mode: string){
       })
     })
   }
-  return JSON.stringify(codeObj);
+  return JSON.stringify(codeObj, null, 2); // space 2, replacer null
 }
 
 
