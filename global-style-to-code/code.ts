@@ -1,40 +1,128 @@
 // global variables
-let textCode = ``;
-let paintCode = ``;
-let effectCode = ``;
-let mode = "object";
-let showTextStyles = false;
-let showPaintStyles = false;
-let showEffectStyles = false;
+
+type ExportMode = "object" | "css" | "scss";
+type Option = "text" | "paint" | "effect";
+type Stylings = {
+	text: TextStyling;
+	paint: PaintStyling;
+	effect: EffectStyling;
+};
+type PaintOption = "RGBA" | "HSL" | "HEX" | "";
+class Styling {
+	code: string;
+	mode: ExportMode;
+	show: boolean;
+	constructor() {
+		this.code = "";
+		this.mode = "object";
+		this.show = false;
+	}
+	getStyle() {}
+	changeMode(mode: ExportMode) {
+		this.mode = mode;
+		this.getStyle(); // 모드 변경후, 코드 반영
+	}
+	changeShow() {
+		if (!this.show) {
+			this.show = true;
+			this.getStyle();
+		} else {
+			this.show = false;
+		}
+	}
+}
+
+class TextStyling extends Styling {
+	style: TextStyle[];
+	constructor(style: TextStyle[]) {
+		super();
+		this.style = style;
+	}
+	getStyle() {
+		this.code = `//text style \n${parseTextStyle(
+			this.style,
+			this.mode
+		)};\n`;
+	}
+}
+
+class PaintStyling extends Styling {
+	style: PaintStyle[];
+	paintOption: PaintOption;
+	constructor(style: PaintStyle[]) {
+		super();
+		this.style = style;
+		this.paintOption = "RGBA";
+	}
+	getStyle() {
+		this.code = `//paint style \n${parsePaintStyle(
+			this.style,
+			this.mode,
+			this.paintOption
+		)};\n`;
+	}
+	changePaintOption(option: PaintOption) {
+		this.paintOption = option;
+		this.getStyle();
+	}
+}
+
+class EffectStyling extends Styling {
+	style: EffectStyle[];
+	constructor(style: EffectStyle[]) {
+		super();
+		this.style = style;
+	}
+	getStyle() {
+		this.code = `//effect style \n${parseEffectStyle(
+			this.style,
+			this.mode
+		)};\n`;
+	}
+}
+
+// postMessage
+function sendMessage(stylings: Stylings) {
+	let code = Object.keys(stylings).reduce((acc, cur) => {
+		const styling = stylings[cur as Option];
+		if (styling.show) {
+			acc += `${styling.code}`;
+		}
+		return acc;
+	}, ``);
+	figma.ui.postMessage(code);
+}
 
 if (figma.editorType === "figma") {
 	figma.showUI(__html__, { width: 400, height: 600 });
 
-	const textStyles = figma.getLocalTextStyles();
-	const paintStyles = figma.getLocalPaintStyles();
-	const effectStyles = figma.getLocalEffectStyles();
+	const stylings: Stylings = {
+		text: new TextStyling(figma.getLocalTextStyles()),
+		paint: new PaintStyling(figma.getLocalPaintStyles()),
+		effect: new EffectStyling(figma.getLocalEffectStyles()),
+	};
 
 	figma.ui.onmessage = (msg) => {
+		console.log(msg);
 		switch (msg.type) {
-			case "object":
-			case "css":
-				mode = msg.type;
-				getPaintStyle(paintStyles);
-			case "text-style":
-			// parsing text style array
-
-			case "paint-style":
-				getPaintStyle(paintStyles);
-			case "effect-style":
-				// parsing effect style array
-
-				let code = `${textCode} ${paintCode} ${effectCode}`;
-				figma.ui.postMessage(code);
+			case "style":
+				const styleId = msg.id as Option;
+				console.log("style", stylings, styleId);
+				stylings[styleId].changeShow();
+				sendMessage(stylings);
+				break;
+			case "mode":
+				const modeId = msg.id as Option;
+				console.log("mode", stylings, modeId);
+				const change = msg.change;
+				stylings[modeId].changeMode(change);
+				sendMessage(stylings);
 				break;
 
-			case "copy":
-				break;
-
+			case "paint-option":
+				const option = msg.option as PaintOption;
+				stylings["paint"].changePaintOption(option);
+				sendMessage(stylings);
 			case "cancel":
 				figma.closePlugin();
 				break;
@@ -42,33 +130,17 @@ if (figma.editorType === "figma") {
 	};
 }
 
-function getTextStyle(textStyles: TextStyle[]) {
-	if (!showTextStyles) {
-		showTextStyles = true;
-		textCode = `//text style \n${parseTextStyle(textStyles, mode)};\n`;
-	} else {
-		showTextStyles = false;
-		textCode = "";
-	}
-}
-
-function getPaintStyle(paintStyles: PaintStyle[]) {
-	if (!showPaintStyles) {
-		showPaintStyles = true;
-		paintCode = `//paint style \n${parsePaintStyle(paintStyles, mode)};\n`;
-	} else {
-		showPaintStyles = false;
-		paintCode = "";
-	}
-}
-
+// parse
 function parseTextStyle(arr: TextStyle[], mode: string) {
-	let codeObj = {} as { [key: string]: any };
-
-	return JSON.stringify(codeObj, null, 2);
+	// let codeObj = {} as { [key: string]: any };
+	// return JSON.stringify(codeObj, null, 2);
 }
 
-function parsePaintStyle(arr: PaintStyle[], mode: string) {
+function parsePaintStyle(
+	arr: PaintStyle[],
+	mode: ExportMode,
+	option: PaintOption
+) {
 	let codeObj = {} as { [key: string]: any };
 	if (mode === "css") {
 		arr.forEach((el) => {
@@ -77,8 +149,8 @@ function parsePaintStyle(arr: PaintStyle[], mode: string) {
 				.reduce((acc, cur) => (acc += `-${cur}`), "-");
 			el.paints.forEach((paint, idx) => {
 				el.paints.length <= 1
-					? (codeObj[`${key}`] = getColor(paint))
-					: (codeObj[`${key}-${idx}`] = getColor(paint));
+					? (codeObj[`${key}`] = getColor(paint, option))
+					: (codeObj[`${key}-${idx}`] = getColor(paint, option));
 			});
 		});
 	} else if (mode === "object") {
@@ -88,11 +160,11 @@ function parsePaintStyle(arr: PaintStyle[], mode: string) {
 			path.forEach((key, i) => {
 				if (i === path.length - 1) {
 					if (el.paints.length <= 1) {
-						cur[key] = getColor(el.paints[0]);
+						cur[key] = getColor(el.paints[0], option);
 					} else {
 						el.paints.forEach((paint, idx) => {
 							checkEmptyObject(cur, key);
-							cur[key][idx] = getColor(paint);
+							cur[key][idx] = getColor(paint, option);
 						});
 					}
 				} else {
@@ -101,7 +173,22 @@ function parsePaintStyle(arr: PaintStyle[], mode: string) {
 				}
 			});
 		});
+	} else if (mode === "scss") {
+		arr.forEach((el) => {
+			let key = getVariableName(el.name)
+				.split("/")
+				.reduce((acc, cur) => (acc += `-${cur}`), "");
+			el.paints.forEach((paint, idx) => {
+				el.paints.length <= 1
+					? (codeObj[`$${key.slice(1)}`] = getColor(paint, option))
+					: (codeObj[`$${key.slice(1)}-${idx}`] = getColor(
+							paint,
+							option
+					  ));
+			});
+		});
 	}
+	console.log(JSON.stringify(codeObj, null, 2));
 	return JSON.stringify(codeObj, null, 2); // space 2, replacer null
 }
 
@@ -110,12 +197,26 @@ function parseEffectStyle(arr: EffectStyle[], mode: string) {
 
 	return JSON.stringify(codeObj, null, 2);
 }
-
-function getColor(obj: Paint) {
+// utils
+function getColor(obj: Paint, paintOption: PaintOption) {
 	if (obj.type === "SOLID") {
-		return `rgba(${round(obj.color.r)},${round(obj.color.g)},${round(
-			obj.color.r
-		)},${round(obj.opacity ? obj.opacity : 1)})`;
+		const { color, opacity } = obj;
+		const r = round(color.r);
+		const g = round(color.g);
+		const b = round(color.b);
+		const a = opacity ? round(opacity) : 1;
+
+		if (paintOption === "RGBA") {
+			return `rgba(${r}, ${g}, ${b}, ${a})`;
+		} else if (paintOption === "HEX") {
+			if (a === 1) {
+				return RGBToHex(r, g, b);
+			} else {
+				return RGBAToHexA(r, g, b, a);
+			}
+		} else if (paintOption === "HSL") {
+			return RGBToHSL(r, g, b, a);
+		}
 	} else {
 		return "support only solid color";
 	}
@@ -146,5 +247,72 @@ function checkEmptyObject(obj: { [key: string]: any }, key: string) {
 }
 
 function getVariableName(name: string) {
-	return name.replace(/[ ][ ]*/g, "-");
+	return name.replace(/[ ][ ]*/g, "-").toLocaleLowerCase(); // temporary only use lower case
+}
+
+function RGBToHex(r: number, g: number, b: number) {
+	let arr = [
+		round(r).toString(16),
+		round(g).toString(16),
+		round(b).toString(16),
+	];
+	arr.forEach((el) => {
+		if (el.length == 1) el = "0" + el;
+	});
+	return "#" + arr.reduce((acc, cur) => (acc += cur), "");
+}
+
+function RGBAToHexA(r: number, g: number, b: number, a: number) {
+	let arr = [
+		round(r).toString(16),
+		round(g).toString(16),
+		round(b).toString(16),
+		Math.round(round(a) * 255).toString(16),
+	];
+	arr.forEach((el) => {
+		if (el.length == 1) el = "0" + el;
+	});
+	return "#" + arr.reduce((acc, cur) => (acc += cur), "");
+}
+
+function RGBToHSL(r: number, g: number, b: number, a: number) {
+	// Make r, g, and b fractions of 1
+	r = round(r) / 255;
+	g = round(g) / 255;
+	b = round(b) / 255;
+
+	// Find greatest and smallest channel values
+	let cmin = Math.min(r, g, b),
+		cmax = Math.max(r, g, b),
+		delta = cmax - cmin,
+		h = 0,
+		s = 0,
+		l = 0;
+
+	// Calculate hue
+	// No difference
+	if (delta == 0) h = 0;
+	// Red is max
+	else if (cmax == r) h = ((g - b) / delta) % 6;
+	// Green is max
+	else if (cmax == g) h = (b - r) / delta + 2;
+	// Blue is max
+	else h = (r - g) / delta + 4;
+
+	h = Math.round(h * 60);
+
+	// Make negative hues positive behind 360°
+	if (h < 0) h += 360;
+
+	// Calculate lightness
+	l = (cmax + cmin) / 2;
+
+	// Calculate saturation
+	s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+	// Multiply l and s by 100
+	s = +(s * 100).toFixed(1);
+	l = +(l * 100).toFixed(1);
+
+	return "hsla(" + h + "," + s + "%," + l + "%," + a + ")";
 }

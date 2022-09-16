@@ -1,30 +1,35 @@
 <style>
-  *{
+  * {
     background-color: #000;
     color: #fff;
   }
+
   #code {
     border: 1px solid rgb(47, 0, 255);
     width: 100%;
     min-height: 300px;
     display: flex;
   }
-  .check-box{
+
+  .check-box {
     margin: 16px 0;
     display: flex;
     flex-direction: column;
   }
-  .input-box{
+
+  .input-box {
     display: flex;
     margin-top: 12px;
     align-items: center;
   }
-  .button-box{
+
+  .button-box {
     display: flex;
     width: 100%;
     justify-content: center;
   }
-  button{
+
+  button {
     background-color: rgb(47, 0, 255);
     width: 150px;
     height: 40px;
@@ -34,7 +39,8 @@
     border: 1px solid #fff;
     cursor: pointer;
   }
-  #toast{
+
+  #toast {
     z-index: 999999;
     position: absolute;
     bottom: 100px;
@@ -52,6 +58,20 @@
     justify-content: center;
     pointer-events: none;
   }
+
+  #convert span {
+    display: flex;
+    flex-direction: column;
+    height: 40px;
+  }
+
+  .mode {
+    margin: 12px 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+    width: 80%;
+    height: 28px;
+  }
 </style>
 <h2>Global Style to Code!</h2>
 <textarea id="code">
@@ -61,101 +81,133 @@
   <button type="button" id="cancel">Cancel</button>
 </div>
 <div class="check-box">
-  <h3>code options</h3>
-  <div class="input-box">
-    <select id="mode">
-      <option value="object" selected>object style</option>
-      <option value="css">css style</option>
-    </select>
+  <h4>Select what style you want to convert to code <br /> and Choose export mode</h4>
+  <div class="input-box" id="convert">
+
+    <span id="text">
+      <label for="text-style">
+        <input type="checkbox" name="text-style" />
+        text style
+      </label>
+      <select onchange="changeMode('text', this.value);" class="mode">
+        <option value="object" selected>object style</option>
+        <option value="css">css style (class)</option>
+        <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
+      </select>
+    </span>
+
+    <span id="paint">
+      <label for="paint-style">
+        <input type="checkbox" name="paint-style" />
+        paint style
+      </label>
+      <select onchange="changeMode('paint', this.value);" class="mode">
+        <option value="object" selected>object style</option>
+        <option value="css">css style (class)</option>
+        <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
+      </select>
+    </span>
+
+    <span id="effect">
+      <label for="effect-style">
+        <input type="checkbox" name="effect-style" />
+        effect style
+      </label>
+      <select onchange="changeMode('effect', this.value);" class="mode">
+        <option value="object" selected>object style</option>
+        <option value="css">css style (class)</option>
+        <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
+      </select></span>
   </div>
 </div>
+
 <div class="check-box">
-  <h3>options</h3>
+  <h4>Paint options</h4>
   <div class="input-box">
-    <input type="checkbox" name="text-style"/>  
-    <label for="text-style">text style</label>
-    <input type="checkbox" name="paint-style"/> 
-    <label for="paint-style">paint style</label>
-    <input type="checkbox" name="effect-style"/>
-    <label for="effect-style">effect style</label>
-  </div>
-</div>
-<div class="check-box">
-  <h3>paint options</h3>
-  <div class="input-box">
-    <label for="RGB">
-      <input type="radio" id="RGB"
-      name="RGB" value="RGB">RGB</label>
+    <label for="RGBA">
+      <input type="radio" id="RGB" name="paint-option" value="RGB">RGB</label>
     <label for="HEX">
-      <input type="radio" id="HEX"
-    name="HEX" value="HEX">HEX</label>
-        <label for="CSS"><input type="radio" id="CSS"
-          name="CSS" value="CSS">
-      CSS</label>
+      <input type="radio" id="HEX" name="paint-option" value="HEX">HEX</label>
     <label for="HSL">
-      <input type="radio" id="HSL"
-    name="HSL" value="HSL">HSL</label>
+      <input type="radio" id="HSL" name="paint-option" value="HSL">HSL</label>
     <label for="HSB">
-      <input type="radio" id="HSB"
-    name="HSB" value="HSB">HSB</label>
+      <input type="radio" id="HSB" name="paint-option" value="HSB">HSB</label>
   </div>
 </div>
 <div id="toast"></div>
 <script>
-onmessage = (event) => {
-  document.getElementById('code').value = event.data.pluginMessage;
-}
-
-document.querySelectorAll('input').forEach(el => el.addEventListener('click', (e) => {
-  parent.postMessage({ pluginMessage: {type: e.target.name}},"*");
-}));
-
-document.getElementById('mode').onchange = (e) =>{
-  parent.postMessage({ pluginMessage: {type: e.target.value}},"*");
-};
-
-document.getElementById('copy').onclick = () => {
-  copyTextToClipboard();
-}
-
-document.getElementById('cancel').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
-}
-
-function copyTextToClipboard() {
-  const text = document.getElementById('code').value;
-  const textArea = document.createElement("textarea");
-  const toast = document.getElementById('toast');
-  
-  textArea.value = text;
-  
-  textArea.style.top = "0";
-  textArea.style.left = "0";
-  textArea.style.position = "fixed";
-
-  document.body.appendChild(textArea);
-  
-  textArea.focus();
-  textArea.select();
-
-  try {
-    const successful = document.execCommand('copy');
-    const msg = successful ? 'successful' : 'unsuccessful';
-    console.log('copy' + msg);
-
-    toast.style.opacity = 1;
-    toast.innerHTML = 'copy ' + msg + " :)";
-    setTimeout(() => {
-      toast.style.opacity = 0; 
-    }, 1000);
-
-  } catch (err) {
-    toast.style.opacity = 1;
-    toast.innerHTML = "copy error :(";
-    
-    console.error(err);
+  onmessage = (event) => {
+    document.getElementById('code').value = event.data.pluginMessage;
   }
-  document.body.removeChild(textArea);
-}
+
+  document.querySelectorAll('#convert label').forEach(el => el.addEventListener("click", (e) => {
+    const select = el.nextElementSibling;
+    const input = el.querySelector('input');
+    const id = el.closest('span').id;
+    if (input.checked) {
+      select.style.height = '100%';
+      select.style.opacity = 1;
+
+    } else {
+      select.style.height = 0;
+      select.style.opacity = 0;
+    }
+    parent.postMessage({ pluginMessage: { type: 'style', id: id } }, "*");
+  }));
+
+
+
+  function changeMode(id, value) {
+    parent.postMessage({ pluginMessage: { type: 'mode', id: id, change: value } }, "*");
+  };
+
+
+
+  document.getElementById('copy').onclick = () => {
+    copyTextToClipboard();
+  }
+
+  document.getElementById('cancel').onclick = () => {
+    parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+  }
+
+
+  function copyTextToClipboard() {
+    const text = document.getElementById('code').value;
+    const textArea = document.createElement("textarea");
+    const toast = document.getElementById('toast');
+
+    textArea.value = text;
+
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+
+    document.body.appendChild(textArea);
+
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      const msg = successful ? 'successful' : 'unsuccessful';
+      console.log('copy' + msg);
+
+      toast.style.opacity = 1;
+      toast.innerHTML = 'copy ' + msg + " :)";
+      setTimeout(() => {
+        toast.style.opacity = 0;
+      }, 1000);
+
+    } catch (err) {
+      toast.style.opacity = 1;
+      toast.innerHTML = "copy error :(";
+
+      console.error(err);
+    }
+    document.body.removeChild(textArea);
+  }
+
+
 
 </script>
