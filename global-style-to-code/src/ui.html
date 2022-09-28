@@ -1,0 +1,64 @@
+<head>
+  <link type="stylesheet" href="./ui.css" />
+  <script src="./ui.js"></script>
+</head>
+<h2>Global Style to Code!</h2>
+<textarea id="code">
+</textarea>
+<div class="button-box">
+  <button type="button" id="copy">Copy to Clip Board</button>
+  <button type="button" id="cancel">Cancel</button>
+</div>
+<div class="check-box">
+  <h4>Select what style you want to convert to code <br /> and Choose export mode</h4>
+  <div class="input-box" id="convert">
+    <span id="text">
+      <label for="text-style">
+        <input type="checkbox" name="text-style" />
+        text style
+      </label>
+      <select onchange="changeMode('text', this.value);" class="mode">
+        <option value="object" selected>object style</option>
+        <option value="css">css style (class)</option>
+        <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
+      </select>
+    </span>
+
+    <span id="paint">
+      <label for="paint-style">
+        <input type="checkbox" name="paint-style" />
+        paint style
+      </label>
+      <select onchange="changeMode('paint', this.value);" class="mode">
+        <option value="object" selected>object style</option>
+        <option value="css">css style (class)</option>
+        <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
+      </select>
+    </span>
+
+    <span id="effect">
+      <label for="effect-style">
+        <input type="checkbox" name="effect-style" />
+        effect style
+      </label>
+      <select onchange="changeMode('effect', this.value);" class="mode">
+        <option value="object" selected>object style</option>
+        <option value="css">css style (class)</option>
+        <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
+      </select></span>
+  </div>
+</div>
+<div class="check-box">
+  <h4>Paint options</h4>
+  <div class="input-box">
+    <label for="RGBA">
+      <input type="radio" id="RGB" name="paint-option" value="RGB">RGB</label>
+    <label for="HEX">
+      <input type="radio" id="HEX" name="paint-option" value="HEX">HEX</label>
+    <label for="HSL">
+      <input type="radio" id="HSL" name="paint-option" value="HSL">HSL</label>
+    <label for="HSB">
+      <input type="radio" id="HSB" name="paint-option" value="HSB">HSB</label>
+  </div>
+</div>
+<div id="toast"></div>

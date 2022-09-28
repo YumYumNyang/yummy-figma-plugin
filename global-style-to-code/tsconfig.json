@@ -1,11 +1,17 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6"],
-    "strict": true,
-    "typeRoots": [
-      "../node_modules/@types",
-      "../node_modules/@figma"
-    ]
-  }
+	"compilerOptions": {
+		"target": "es6",
+		"lib": ["es6"],
+		"strict": true,
+		"typeRoots": [
+			"@types",
+			"../node_modules/@types",
+			"../node_modules/@figma"
+		],
+		"allowJs": true,
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"outDir": "dist",
+		"declarationMap": true
+	}
 }
