@@ -3,6 +3,7 @@
 *.log.*
 node_modules
 
+yarn_lock
 out/
 dist/
 code.js
