@@ -86,6 +86,8 @@ export function parsePaintStyle(
 			});
 		});
 	}
-	console.log(JSON.stringify(codeObj, null, 2));
-	return JSON.stringify(codeObj, null, 2); // space 2, replacer null
+	let code = JSON.stringify(codeObj, null, 2);
+	return Object.keys(codeObj).length
+		? `//paint style \n ${code}\n`
+		: `//no assigned global paint code\n`; // space 2, replacer null
 }

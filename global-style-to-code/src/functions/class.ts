@@ -34,10 +34,7 @@ export class TextStyling extends Styling {
 		this.style = style;
 	}
 	getStyle() {
-		this.code = `//text style \n${parseTextStyle(
-			this.style,
-			this.mode
-		)};\n`;
+		this.code = parseTextStyle(this.style, this.mode);
 	}
 }
 
@@ -50,11 +47,7 @@ export class PaintStyling extends Styling {
 		this.paintOption = "RGB";
 	}
 	getStyle() {
-		this.code = `//paint style \n${parsePaintStyle(
-			this.style,
-			this.mode,
-			this.paintOption
-		)};\n`;
+		this.code = parsePaintStyle(this.style, this.mode, this.paintOption);
 	}
 	changePaintOption(option: PaintOption) {
 		this.paintOption = option;
@@ -69,9 +62,6 @@ export class EffectStyling extends Styling {
 		this.style = style;
 	}
 	getStyle() {
-		this.code = `//effect style \n${parseEffectStyle(
-			this.style,
-			this.mode
-		)};\n`;
+		this.code = parseEffectStyle(this.style, this.mode);
 	}
 }

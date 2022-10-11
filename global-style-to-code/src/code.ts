@@ -15,7 +15,7 @@ function sendMessage(stylings: Stylings) {
 }
 
 if (figma.editorType === "figma") {
-	figma.showUI(__html__, { width: 400, height: 600 });
+	figma.showUI(__html__, { width: 400, height: 760 });
 
 	const stylings: Stylings = {
 		text: new TextStyling(figma.getLocalTextStyles()),
@@ -41,9 +41,10 @@ if (figma.editorType === "figma") {
 				break;
 
 			case "paint-option":
-				const option = msg.option as PaintOption;
+				const option = msg.id as PaintOption;
 				stylings["paint"].changePaintOption(option);
 				sendMessage(stylings);
+				break;
 			case "cancel":
 				figma.closePlugin();
 				break;
