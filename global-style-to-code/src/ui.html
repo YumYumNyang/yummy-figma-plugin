@@ -17,11 +17,11 @@
   <h4>Select what style you want to convert to code <br /> and Choose export mode</h4>
   <div class="input-box" id="convert">
     <span id="text">
-      <label for="text-style">
-        <input type="checkbox" name="text-style" />
+      <label>
+        <input type="checkbox" id="text-style" name="text-style" />
         text style
       </label>
-      <select onchange="changeMode('text', this.value);" class="mode">
+      <select class="mode" data-mode="text">
         <option value="object" selected>object style</option>
         <option value="css">css style (class)</option>
         <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
@@ -29,11 +29,11 @@
     </span>
 
     <span id="paint">
-      <label for="paint-style">
-        <input type="checkbox" name="paint-style" />
+      <label>
+        <input type="checkbox" id="paint-style" name="paint-style" />
         paint style
       </label>
-      <select onchange="changeMode('paint', this.value);" class="mode">
+      <select class="mode" data-mode="paint">
         <option value="object" selected>object style</option>
         <option value="css">css style (class)</option>
         <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
@@ -41,11 +41,11 @@
     </span>
 
     <span id="effect">
-      <label for="effect-style">
-        <input type="checkbox" name="effect-style" />
+      <label>
+        <input type="checkbox" id="effect-style" name="effect-style" />
         effect style
       </label>
-      <select onchange="changeMode('effect', this.value);" class="mode">
+      <select class="mode" data-mode="effect">
         <option value="object" selected>object style</option>
         <option value="css">css style (class)</option>
         <option value="scss">scss style (text: mixin, color: variable, effect: mixin )</option>
@@ -55,14 +55,10 @@
 <div class="check-box">
   <h4>Paint options</h4>
   <div class="input-box">
-    <label for="RGBA">
-      <input type="radio" id="RGB" name="paint-option" value="RGB">RGB</label>
-    <label for="HEX">
-      <input type="radio" id="HEX" name="paint-option" value="HEX">HEX</label>
-    <label for="HSL">
-      <input type="radio" id="HSL" name="paint-option" value="HSL">HSL</label>
-    <label for="HSB">
-      <input type="radio" id="HSB" name="paint-option" value="HSB">HSB</label>
+    <label><input type="radio" id="RGB" name="paint-option" value="RGB" checked />RGB</label>
+    <label><input type="radio" id="HEX" name="paint-option" value="HEX" />HEX</label>
+    <label><input type="radio" id="HSL" name="paint-option" value="HSL" />HSL</label>
+    <label><input type="radio" id="HSB" name="paint-option" value="HSB" />HSB</label>
   </div>
 </div>
 <div id="toast"></div>

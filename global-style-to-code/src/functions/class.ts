@@ -47,7 +47,7 @@ export class PaintStyling extends Styling {
 	constructor(style: PaintStyle[]) {
 		super();
 		this.style = style;
-		this.paintOption = "RGBA";
+		this.paintOption = "RGB";
 	}
 	getStyle() {
 		this.code = `//paint style \n${parsePaintStyle(

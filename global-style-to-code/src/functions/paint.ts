@@ -17,7 +17,7 @@ export function getColor(obj: Paint, paintOption: PaintOption) {
 
 		const a = opacity ? round(opacity) : 1;
 
-		if (paintOption === "RGBA") {
+		if (paintOption === "RGB") {
 			return `rgba(${r}, ${g}, ${b}, ${a})`;
 		} else if (paintOption === "HEX") {
 			if (a === 1) {

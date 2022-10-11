@@ -12,7 +12,7 @@ export type Stylings = {
 	effect: EffectStyling;
 };
 
-export type PaintOption = "RGBA" | "HSL" | "HEX" | "HSB";
+export type PaintOption = "RGB" | "HSL" | "HEX" | "HSB";
 
 export class Styling {
 	code: string;
