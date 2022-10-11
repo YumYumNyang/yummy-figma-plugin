@@ -4,9 +4,9 @@
 		"lib": ["es6"],
 		"strict": true,
 		"typeRoots": [
-			"@types",
-			"../node_modules/@types",
-			"../node_modules/@figma"
+			"./node_modules/@types",
+			"./node_modules/@figma",
+			"./src/@types"
 		],
 		"allowJs": true,
 		"declaration": true,

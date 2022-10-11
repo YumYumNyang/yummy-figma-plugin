@@ -23,7 +23,7 @@ if (figma.editorType === "figma") {
 		effect: new EffectStyling(figma.getLocalEffectStyles()),
 	};
 
-	figma.ui.onmessage = (msg) => {
+	figma.ui.onmessage = (msg: any) => {
 		console.log(msg);
 		switch (msg.type) {
 			case "style":

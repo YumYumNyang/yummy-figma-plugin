@@ -3,18 +3,28 @@
 	"version": "1.0.0",
 	"description": "extract all styling from figma files",
 	"scripts": {
-		"start": "parcel",
-		"build": "parcel build"
+		"start": "parcel src/ui.html src/code.ts",
+		"build": "parcel build  "
 	},
-	"source": "src/code.ts",
-	"module": "dist/code.js",
-	"types": "dist/index.d.ts",
+	"source": [
+		"src/code.ts",
+		"src/ui.html"
+	],
+	"target": {
+		"default": {
+			"source": [
+				"src/code.ts",
+				"src/ui.html"
+			]
+		}
+	},
 	"author": "hyewon kwak",
 	"license": "MIT",
 	"devDependencies": {
+		"@babel/core": "^7.12.0",
+		"@babel/preset-env": "^7.19.3",
 		"@figma/plugin-typings": "*",
-		"parcel": "^2.7.0",
+		"parcel": "latest",
 		"typescript": "^4.3.5"
-	},
-	"dependencies": {}
+	}
 }

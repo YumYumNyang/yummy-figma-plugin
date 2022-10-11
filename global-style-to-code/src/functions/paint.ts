@@ -45,7 +45,7 @@ export function parsePaintStyle(
 			let key = getVariableName(el.name)
 				.split("/")
 				.reduce((acc: string, cur: string) => (acc += `-${cur}`), "-");
-			el.paints.forEach((paint, idx) => {
+			el.paints.forEach((paint: any, idx: number) => {
 				el.paints.length <= 1
 					? (codeObj[`${key}`] = getColor(paint, option))
 					: (codeObj[`${key}-${idx}`] = getColor(paint, option));
@@ -60,7 +60,7 @@ export function parsePaintStyle(
 					if (el.paints.length <= 1) {
 						cur[key] = getColor(el.paints[0], option);
 					} else {
-						el.paints.forEach((paint, idx) => {
+						el.paints.forEach((paint: any, idx: number) => {
 							checkEmptyObject(cur, key);
 							cur[key][idx] = getColor(paint, option);
 						});
@@ -76,7 +76,7 @@ export function parsePaintStyle(
 			let key = getVariableName(el.name)
 				.split("/")
 				.reduce((acc: string, cur: string) => (acc += `-${cur}`), "");
-			el.paints.forEach((paint, idx) => {
+			el.paints.forEach((paint: any, idx: number) => {
 				el.paints.length <= 1
 					? (codeObj[`$${key.slice(1)}`] = getColor(paint, option))
 					: (codeObj[`$${key.slice(1)}-${idx}`] = getColor(

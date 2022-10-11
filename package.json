@@ -22,6 +22,8 @@
 	"homepage": "https://github.com/YumYumNyang/yummy-figma-plugin#readme",
 	"devDependencies": {
 		"@figma/plugin-typings": "^1.50.0",
-		"prettier": "^2.7.1"
+		"@parcel/transformer-typescript-types": "^2.7.0",
+		"prettier": "^2.7.1",
+		"typescript": "^4.8.4"
 	}
 }
