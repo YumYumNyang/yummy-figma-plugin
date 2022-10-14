@@ -15,7 +15,7 @@ function sendMessage(stylings: Stylings) {
 }
 
 if (figma.editorType === "figma") {
-	figma.showUI(__html__, { width: 400, height: 760 });
+	figma.showUI(__html__, { width: 400, height: 720 });
 
 	const stylings: Stylings = {
 		text: new TextStyling(figma.getLocalTextStyles()),
@@ -24,17 +24,14 @@ if (figma.editorType === "figma") {
 	};
 
 	figma.ui.onmessage = (msg: any) => {
-		console.log(msg);
 		switch (msg.type) {
 			case "style":
 				const styleId = msg.id as Option;
 				stylings[styleId].changeShow();
-				console.log("style", stylings[styleId]);
 				sendMessage(stylings);
 				break;
 			case "mode":
 				const modeId = msg.id as Option;
-				console.log("mode", stylings, modeId);
 				const change = msg.change;
 				stylings[modeId].changeMode(change);
 				sendMessage(stylings);

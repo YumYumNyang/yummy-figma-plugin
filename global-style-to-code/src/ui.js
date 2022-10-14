@@ -7,7 +7,6 @@ document.querySelectorAll("input[type=checkbox]").forEach((el) => {
 		const container = el.closest("span");
 		const id = container.id;
 		const select = container.querySelector(".mode");
-		console.log(el, select);
 		if (el.checked) {
 			select.style.height = "100%";
 			select.style.opacity = 1;
@@ -31,7 +30,6 @@ document.querySelectorAll("input[type=radio]").forEach((el) => {
 });
 
 document.querySelectorAll("select.mode").forEach((select) => {
-	console.log(select.dataset.mode, select.value);
 	select.addEventListener("change", () => {
 		changeMode(select.dataset.mode, select.value);
 	});
@@ -70,17 +68,18 @@ function copyTextToClipboard() {
 
 	try {
 		const successful = document.execCommand("copy");
-		const msg = successful ? "successful" : "unsuccessful";
-		console.log("copy" + msg);
+		const msg = successful
+			? "successfully copied! d(=^･ω･^=)b"
+			: "error occured (=ＴェＴ=) ";
 
 		toast.style.opacity = 1;
-		toast.innerHTML = "copy " + msg + " :)";
+		toast.innerHTML = msg;
 		setTimeout(() => {
 			toast.style.opacity = 0;
 		}, 1000);
 	} catch (err) {
 		toast.style.opacity = 1;
-		toast.innerHTML = "copy error :(";
+		toast.innerHTML = "error occured (=ＴェＴ=) ";
 
 		console.error(err);
 	}
