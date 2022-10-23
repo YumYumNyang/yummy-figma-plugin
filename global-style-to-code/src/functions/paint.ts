@@ -73,8 +73,8 @@ export function parsePaintStyle(
       let key = getDepthName(el.name);
       el.paints.forEach((paint: any, idx: number) => {
         el.paints.length <= 1
-          ? (codeObj[`$${key.slice(1)}`] = getColor(paint, option))
-          : (codeObj[`$${key.slice(1)}-${idx}`] = getColor(paint, option));
+          ? (codeObj[`$${key}`] = getColor(paint, option))
+          : (codeObj[`$${key}-${idx}`] = getColor(paint, option));
       });
     });
   }
