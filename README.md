@@ -33,7 +33,7 @@ if you choose to convert paint style, there's options for color expression
 1. turn on this plugin in your figma file
 2. check styles that you want to get
 3. check export options
-4. copy and paste to your code!
+4. copy and paste on your code!
 
 ### Got questions?
 please contact me :) 
