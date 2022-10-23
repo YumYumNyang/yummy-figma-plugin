@@ -7,26 +7,26 @@ Global Style To Code enables developers to quickly convert global styles (text, 
 
 
 ### All support styles 
-text styles
-paint styles
-effect styles
+- text styles
+- paint styles
+- effect styles
 
 
 ### Variable Options
 you can convert styles to code in several ways
 
-Javascript object style
-CSS class style (only in paint style)
-CSS variable style
-SCSS mixin style
-SCSS variable style(only in paint style) 
+- Javascript object style
+- CSS class style (only in paint style)
+- CSS variable style
+- SCSS mixin style
+- SCSS variable style(only in paint style) 
 
 
 if you choose to convert paint style, there's options for color expression
 
-RGBA code (default)
-HEX code (etc. #EEFF00)
-HSL code (etc. hsl(240, 100%, 50%))
+- RGBA code (default)
+- HEX code (etc. #EEFF00)
+- HSL code (etc. hsl(240, 100%, 50%))
 
 
 ### How to use
