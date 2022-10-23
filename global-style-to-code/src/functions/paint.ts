@@ -87,7 +87,7 @@ export function parsePaintStyle(
   if (mode === "css" || mode === "scss") {
     code = code.replace(/"/g, "").replace(/,/g, ";").replace("\n}", ";\n}");
   }
-  return Object.keys(codeObj).length
+  return arr.length
     ? `//paint style \n ${code}\n`
     : `//no assigned global paint code\n`; // space 2, replacer null
 }
