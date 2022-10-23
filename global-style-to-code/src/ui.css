@@ -1,6 +1,7 @@
 * {
   color: #2c2c2c;
   accent-color: #2300be;
+  font-family: "Poppins", sans-serif;
 }
 
 .plugin-body {
@@ -40,6 +41,9 @@
   margin: 8px 0;
 }
 
+h3 {
+  font-family: "Rubik Mono One", sans-serif;
+}
 h4 {
   margin: 8px 0;
 }
@@ -62,9 +66,9 @@ button {
   position: absolute;
   bottom: 100px;
   left: 50%;
-  margin-left: -80px;
+  margin-left: -100px;
   opacity: 0;
-  width: 160px;
+  width: 200px;
   padding: 8px;
   text-align: center;
   display: flex;
