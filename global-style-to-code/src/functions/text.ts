@@ -1,5 +1,6 @@
 import { TextStyling } from "./class";
-const mapper = {
+import { getDepthName, replaceToStyleCode } from "./utils";
+const textStyleMapper = {
   textDecoration: {
     ["UNDERLLINE"]: "underline",
     ["STRIKETHROUGH"]: "line-through",
@@ -32,13 +33,13 @@ export function parseTextStyle(arr: TextStyle[], mode: string) {
     style["font-size"] = `${textStyle.fontSize}px`;
     if (textStyle.textDecoration !== "NONE")
       style["text-decoration"] =
-        mapper["textDecoration"][textStyle.textDecoration];
+        textStyleMapper["textDecoration"][textStyle.textDecoration];
     style["font-family"] = textStyle.fontName.family;
     textStyle.fontName.style.split(" ").forEach((st: string) => {
       if (st === "Italic") {
         style["font-style"] = "italic";
       } else {
-        const mappedWeight = mapper["fontStyle"][st];
+        const mappedWeight = textStyleMapper["fontStyle"][st];
         if (mappedWeight) style["font-weight"] = mappedWeight;
       }
     });
@@ -57,23 +58,22 @@ export function parseTextStyle(arr: TextStyle[], mode: string) {
     if (textStyle.paragraphIndent != 0)
       style["text-indent"] = `${textStyle.paragraphIndent}px`;
     if (textStyle.textCase !== "ORIGINAL")
-      style["text-transform"] = mapper["textCase"][textStyle.textCase];
-    codeObj[
-      textStyle.name
-        .split("/")
-        .reduce((acc: string, cur: string) => (acc += `-${cur}`), "")
-        .slice(1)
-    ] = style;
+      style["text-transform"] = textStyleMapper["textCase"][textStyle.textCase];
+    codeObj[getDepthName(textStyle.name)] = style;
   });
 
   if (mode === "css") {
     code = Object.keys(codeObj).reduce((acc, key) => {
-      acc += `.${key} ${JSON.stringify(codeObj[key], null, 2)}\n`;
+      acc += `.${key} ${replaceToStyleCode(
+        JSON.stringify(codeObj[key], null, 2)
+      )}\n`;
       return acc;
     }, ``);
   } else if (mode === "scss") {
     code = Object.keys(codeObj).reduce((acc, key) => {
-      acc += `@mixin ${key} ${JSON.stringify(codeObj[key], null, 2)}\n`;
+      acc += `@mixin ${key} ${replaceToStyleCode(
+        JSON.stringify(codeObj[key], null, 2)
+      )}\n`;
       return acc;
     }, ``);
   } else {

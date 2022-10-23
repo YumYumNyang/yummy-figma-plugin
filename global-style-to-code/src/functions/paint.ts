@@ -1,7 +1,10 @@
 import { ExportMode, PaintOption } from "../@types/index";
 import {
   checkEmptyObject,
+  getDepthName,
+  getRGBA,
   getVariableName,
+  replaceToStyleCode,
   RGBAToHexA,
   RGBToHex,
   RGBToHSL,
@@ -11,12 +14,8 @@ import {
 export function getColor(obj: Paint, paintOption: PaintOption) {
   if (obj.type === "SOLID") {
     const { color, opacity } = obj;
-    const r = Math.floor(color.r * 255);
-    const b = Math.floor(color.b * 255);
-    const g = Math.floor(color.g * 255);
 
-    const a = opacity ? round(opacity) : 1;
-
+    const [r, g, b, a] = getRGBA(color, opacity);
     if (paintOption === "RGB") {
       return `rgba(${r}, ${g}, ${b}, ${a})`;
     } else if (paintOption === "HEX") {
@@ -42,9 +41,7 @@ export function parsePaintStyle(
   let codeObj = {} as { [key: string]: any };
   if (mode === "css") {
     arr.forEach((el) => {
-      let key = getVariableName(el.name)
-        .split("/")
-        .reduce((acc: string, cur: string) => (acc += `-${cur}`), "-");
+      let key = getDepthName(el.name);
       el.paints.forEach((paint: any, idx: number) => {
         el.paints.length <= 1
           ? (codeObj[`${key}`] = getColor(paint, option))
@@ -73,9 +70,7 @@ export function parsePaintStyle(
     });
   } else if (mode === "scss") {
     arr.forEach((el) => {
-      let key = getVariableName(el.name)
-        .split("/")
-        .reduce((acc: string, cur: string) => (acc += `-${cur}`), "");
+      let key = getDepthName(el.name);
       el.paints.forEach((paint: any, idx: number) => {
         el.paints.length <= 1
           ? (codeObj[`$${key.slice(1)}`] = getColor(paint, option))
@@ -85,7 +80,7 @@ export function parsePaintStyle(
   }
   let code = JSON.stringify(codeObj, null, 2);
   if (mode === "css" || mode === "scss") {
-    code = code.replace(/"/g, "").replace(/,/g, ";").replace("\n}", ";\n}");
+    code = replaceToStyleCode(code);
   }
   return arr.length
     ? `//paint style \n ${code}\n`
