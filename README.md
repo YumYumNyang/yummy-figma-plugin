@@ -25,8 +25,8 @@ you can convert styles to code in several ways
 if you choose to convert paint style, there's options for color expression
 
 - RGBA code (default)
-- HEX code (etc. #EEFF00)
-- HSL code (etc. hsl(240, 100%, 50%))
+- HEX code (ex. #EEFF00)
+- HSL code (ex. hsl(240, 100%, 50%))
 
 
 ### How to use
