@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "extract all styling from figma files",
   "scripts": {
-    "start": "parcel src/ui.html src/code.ts --no-source-maps  --no-cache",
+    "start": "parcel src/ui.html src/code.ts  --no-source-maps --no-cache --no-hmr",
     "build": "parcel build --no-source-maps  --no-cache"
   },
   "source": [
@@ -22,9 +22,8 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.12.0",
-    "@babel/preset-env": "^7.19.3",
     "@figma/plugin-typings": "*",
-    "parcel": "latest",
+    "parcel": "2.8.0",
     "typescript": "^4.3.5"
   }
 }
