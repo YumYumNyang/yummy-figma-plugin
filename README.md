@@ -22,7 +22,7 @@ you can convert styles to code in several ways
 - SCSS variable style(only in paint style) 
 
 
-if you choose to convert paint style, there's options for color expression
+if you choose to convert paint style, there are options for color expression
 
 - RGBA code (default)
 - HEX code (ex. #EEFF00)
