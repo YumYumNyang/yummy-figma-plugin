@@ -1,4 +1,19 @@
 // utils
+export function checkDuplicatedName(
+  originKey: string,
+  codeObj: object,
+  dupCnt: object
+) {
+  let key = '';
+  if (!codeObj[originKey]) {
+    key = originKey;
+    dupCnt[originKey] = 1;
+  } else {
+    key = `${originKey}-${dupCnt[originKey]}`;
+    dupCnt[originKey]++;
+  }
+  return key;
+}
 
 export function getDepthName(name: string) {
   return getVariableName(name)

@@ -1,75 +1,79 @@
-import { TextStyling } from "./class";
-import { getDepthName, replaceToStyleCode } from "./utils";
+import { TextStyling } from './class';
+import { checkDuplicatedName, getDepthName, replaceToStyleCode } from './utils';
 const textStyleMapper = {
   textDecoration: {
-    ["UNDERLLINE"]: "underline",
-    ["STRIKETHROUGH"]: "line-through",
+    ['UNDERLLINE']: 'underline',
+    ['STRIKETHROUGH']: 'line-through',
   },
   fontStyle: {
-    ["Thin"]: 100,
-    ["ExtraLight"]: 200,
-    ["Light"]: 300,
-    ["Regular"]: 400,
-    ["Medium"]: 500,
-    ["SemiBold"]: 600,
-    ["Bold"]: 700,
-    ["ExtraBold"]: 800,
-    ["Black"]: 900,
+    ['Thin']: 100,
+    ['ExtraLight']: 200,
+    ['Light']: 300,
+    ['Regular']: 400,
+    ['Medium']: 500,
+    ['SemiBold']: 600,
+    ['Bold']: 700,
+    ['ExtraBold']: 800,
+    ['Black']: 900,
   },
   textCase: {
-    ["UPPER"]: "uppercase",
-    ["LOWER"]: "lowercase",
-    ["TITLE"]: "capitalize",
+    ['UPPER']: 'uppercase',
+    ['LOWER']: 'lowercase',
+    ['TITLE']: 'capitalize',
   },
 };
 
 // parse
 export function parseTextStyle(arr: TextStyle[], mode: string) {
-  let code = "";
-  let codeObj = {};
+  let code = '';
+  let codeObj = {} as { [key: string]: any };
+  let dupCnt = {} as { [key: string]: number };
 
   arr.forEach((textStyle) => {
     let style: { [key: string]: any } = {};
-    style["font-size"] = `${textStyle.fontSize}px`;
-    if (textStyle.textDecoration !== "NONE")
-      style["text-decoration"] =
-        textStyleMapper["textDecoration"][textStyle.textDecoration];
-    style["font-family"] = textStyle.fontName.family;
-    textStyle.fontName.style.split(" ").forEach((st: string) => {
-      if (st === "Italic") {
-        style["font-style"] = "italic";
+    style['font-size'] = `${textStyle.fontSize}px`;
+    if (textStyle.textDecoration !== 'NONE')
+      style['text-decoration'] =
+        textStyleMapper['textDecoration'][textStyle.textDecoration];
+    style['font-family'] = textStyle.fontName.family;
+    textStyle.fontName.style.split(' ').forEach((st: string) => {
+      if (st === 'Italic') {
+        style['font-style'] = 'italic';
       } else {
-        const mappedWeight = textStyleMapper["fontStyle"][st];
-        if (mappedWeight) style["font-weight"] = mappedWeight;
+        const mappedWeight = textStyleMapper['fontStyle'][st];
+        if (mappedWeight) style['font-weight'] = mappedWeight;
       }
     });
-    style["letter-spacing"] =
-      textStyle.letterSpacing.unit === "PIXELS"
+    style['letter-spacing'] =
+      textStyle.letterSpacing.unit === 'PIXELS'
         ? `${textStyle.letterSpacing.value}px`
         : `${textStyle.letterSpacing.value / 100}em`;
 
-    if (textStyle.lineHeight.unit !== "AUTO") {
-      style["line-height"] =
-        textStyle.letterSpacing.unit === "PIXELS"
+    if (textStyle.lineHeight.unit !== 'AUTO') {
+      style['line-height'] =
+        textStyle.letterSpacing.unit === 'PIXELS'
           ? `${textStyle.letterSpacing.value}px`
           : `${textStyle.letterSpacing.value}px`;
     }
 
     if (textStyle.paragraphIndent != 0)
-      style["text-indent"] = `${textStyle.paragraphIndent}px`;
-    if (textStyle.textCase !== "ORIGINAL")
-      style["text-transform"] = textStyleMapper["textCase"][textStyle.textCase];
-    codeObj[getDepthName(textStyle.name)] = style;
+      style['text-indent'] = `${textStyle.paragraphIndent}px`;
+    if (textStyle.textCase !== 'ORIGINAL')
+      style['text-transform'] = textStyleMapper['textCase'][textStyle.textCase];
+
+    const originKey = getDepthName(textStyle.name);
+    const key = checkDuplicatedName(originKey, codeObj, dupCnt);
+    codeObj[key] = style;
   });
 
-  if (mode === "css") {
+  if (mode === 'css') {
     code = Object.keys(codeObj).reduce((acc, key) => {
       acc += `.${key} ${replaceToStyleCode(
         JSON.stringify(codeObj[key], null, 2)
       )}\n`;
       return acc;
     }, ``);
-  } else if (mode === "scss") {
+  } else if (mode === 'scss') {
     code = Object.keys(codeObj).reduce((acc, key) => {
       acc += `@mixin ${key} ${replaceToStyleCode(
         JSON.stringify(codeObj[key], null, 2)
