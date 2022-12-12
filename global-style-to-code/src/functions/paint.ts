@@ -1,5 +1,6 @@
-import { ExportMode, PaintOption } from "../@types/index";
+import { ExportMode, PaintOption } from '../@types/index';
 import {
+  checkDuplicatedName,
   checkEmptyObject,
   getDepthName,
   getRGBA,
@@ -8,27 +9,26 @@ import {
   RGBAToHexA,
   RGBToHex,
   RGBToHSL,
-  round,
-} from "./utils";
+} from './utils';
 
 export function getColor(obj: Paint, paintOption: PaintOption) {
-  if (obj.type === "SOLID") {
+  if (obj.type === 'SOLID') {
     const { color, opacity } = obj;
 
     const [r, g, b, a] = getRGBA(color, opacity);
-    if (paintOption === "RGB") {
+    if (paintOption === 'RGB') {
       return `rgba(${r}, ${g}, ${b}, ${a})`;
-    } else if (paintOption === "HEX") {
+    } else if (paintOption === 'HEX') {
       if (a === 1) {
         return RGBToHex(r, g, b);
       } else {
         return RGBAToHexA(r, g, b, a);
       }
-    } else if (paintOption === "HSL") {
+    } else if (paintOption === 'HSL') {
       return RGBToHSL(r, g, b, a);
     }
   } else {
-    return "support only solid color";
+    return 'support only solid color';
   }
 }
 
@@ -39,20 +39,25 @@ export function parsePaintStyle(
   option: PaintOption
 ) {
   let codeObj = {} as { [key: string]: any };
-  if (mode === "css") {
+  let dupCnt = {} as { [key: string]: number };
+  if (mode === 'css') {
     arr.forEach((el) => {
-      let key = getDepthName(el.name);
+      let originKey = getDepthName(el.name);
+      let key = checkDuplicatedName(originKey, codeObj, dupCnt);
+
       el.paints.forEach((paint: any, idx: number) => {
         el.paints.length <= 1
           ? (codeObj[`${key}`] = getColor(paint, option))
           : (codeObj[`${key}-${idx}`] = getColor(paint, option));
       });
     });
-  } else if (mode === "object") {
+  } else if (mode === 'object') {
     arr.forEach((el) => {
-      let path = getVariableName(el.name).split("/");
+      let path = getVariableName(el.name).split('/');
       let cur = codeObj;
-      path.forEach((key: any, i: number) => {
+      path.forEach((originKey: any, i: number) => {
+        let key = checkDuplicatedName(originKey, codeObj, dupCnt);
+
         if (i === path.length - 1) {
           if (el.paints.length <= 1) {
             cur[key] = getColor(el.paints[0], option);
@@ -68,9 +73,10 @@ export function parsePaintStyle(
         }
       });
     });
-  } else if (mode === "scss") {
+  } else if (mode === 'scss') {
     arr.forEach((el) => {
-      let key = getDepthName(el.name);
+      let originKey = getDepthName(el.name);
+      let key = checkDuplicatedName(originKey, codeObj, dupCnt);
       el.paints.forEach((paint: any, idx: number) => {
         el.paints.length <= 1
           ? (codeObj[`$${key}`] = getColor(paint, option))
@@ -79,7 +85,7 @@ export function parsePaintStyle(
     });
   }
   let code = JSON.stringify(codeObj, null, 2);
-  if (mode === "css" || mode === "scss") {
+  if (mode === 'css' || mode === 'scss') {
     code = replaceToStyleCode(code);
   }
   return arr.length
