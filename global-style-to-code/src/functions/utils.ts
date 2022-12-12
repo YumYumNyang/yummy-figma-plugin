@@ -2,12 +2,12 @@
 
 export function getDepthName(name: string) {
   return getVariableName(name)
-    .split("/")
-    .reduce((acc: string, cur: string) => (acc += `-${cur}`), "")
+    .split('/')
+    .reduce((acc: string, cur: string) => (acc += `-${cur}`), '')
     .slice(1);
 }
 export function replaceToStyleCode(code: string) {
-  return code.replace(/"/g, "").replace(/,\n/g, ";\n").replace("\n}", ";\n}");
+  return code.replace(/"/g, '').replace(/,\n/g, ';\n').replace('\n}', ';\n}');
 }
 
 export function getRGBA(color: RGB | RGBA, opacity?: number) {
@@ -21,15 +21,15 @@ export function getRGBA(color: RGB | RGBA, opacity?: number) {
 export function round(number: Number) {
   let roundedNumber;
   // Shift
-  roundedNumber = number.toString().split("e");
+  roundedNumber = number.toString().split('e');
   roundedNumber = Math.round(
-    +(roundedNumber[0] + "e" + (roundedNumber[1] ? +roundedNumber[1] + 1 : 1))
+    +(roundedNumber[0] + 'e' + (roundedNumber[1] ? +roundedNumber[1] + 1 : 1))
   );
   // Shift back
-  roundedNumber = roundedNumber.toString().split("e");
+  roundedNumber = roundedNumber.toString().split('e');
   return +(
     roundedNumber[0] +
-    "e" +
+    'e' +
     (roundedNumber[1] ? +roundedNumber[1] - 1 : -1)
   );
 }
@@ -39,7 +39,7 @@ export function checkEmptyObject(obj: { [key: string]: any }, key: string) {
 }
 
 export function getVariableName(name: string) {
-  return name.replace(/[ ][ ]*/g, "-").toLocaleLowerCase(); // temporary only use lower case
+  return name.replace(/[ ][ ]*/g, '-').toLocaleLowerCase(); // temporary only use lower case
 }
 
 export function RGBToHex(r: number, g: number, b: number) {
@@ -48,10 +48,13 @@ export function RGBToHex(r: number, g: number, b: number) {
     round(g).toString(16),
     round(b).toString(16),
   ];
-  arr.forEach((el) => {
-    if (el.length == 1) el = "0" + el;
+  arr = arr.map((el) => {
+    if (el.length < 2) {
+      return '0' + el;
+    }
+    return el;
   });
-  return "#" + arr.reduce((acc, cur) => (acc += cur), "");
+  return '#' + arr.join('');
 }
 
 export function RGBAToHexA(r: number, g: number, b: number, a: number) {
@@ -61,10 +64,13 @@ export function RGBAToHexA(r: number, g: number, b: number, a: number) {
     round(b).toString(16),
     Math.round(round(a) * 255).toString(16),
   ];
-  arr.forEach((el) => {
-    if (el.length == 1) el = "0" + el;
+  arr = arr.map((el) => {
+    if (el.length < 2) {
+      return '0' + el;
+    }
+    return el;
   });
-  return "#" + arr.reduce((acc, cur) => (acc += cur), "");
+  return '#' + arr.join('');
 }
 
 export function RGBToHSL(r: number, g: number, b: number, a: number) {
@@ -106,5 +112,5 @@ export function RGBToHSL(r: number, g: number, b: number, a: number) {
   s = +(s * 100).toFixed(1);
   l = +(l * 100).toFixed(1);
 
-  return "hsla(" + h + "," + s + "%," + l + "%," + a + ")";
+  return 'hsla(' + h + ',' + s + '%,' + l + '%,' + a + ')';
 }
