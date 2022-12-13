@@ -7,12 +7,19 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&family=Rubik+Mono+One&display=swap"
     rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">
 </head>
 
 <body class="plugin-body">
   <h3>Global Style to Code!</h3>
-  <textarea id="code">
-</textarea>
+  <!-- <textarea id="code"></textarea> -->
+  <div id="code">
+    <pre><code id="text-code"></code></pre>
+    <pre><code id="paint-code"></code></pre>
+    <pre><code id="effect-code"></code></pre>
+  </div>
+
   <div class="button-box">
     <button type="button" id="copy">Copy to Clip Board</button>
     <button type="button" id="cancel">Cancel</button>

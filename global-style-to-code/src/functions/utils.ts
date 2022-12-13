@@ -1,11 +1,17 @@
+import { Option } from '../@types';
+
 // utils
-export function checkDuplicatedName(
-  originKey: string,
-  codeObj: object,
-  dupCnt: object
-) {
+export function commentMapper(str: string, mode: string) {
+  if (mode === 'object') {
+    return `//${str}`;
+  } else {
+    return `/*${str}*/`;
+  }
+}
+
+export function checkDuplicatedName(originKey: string, dupCnt: object) {
   let key = '';
-  if (!codeObj[originKey]) {
+  if (!dupCnt[originKey]) {
     key = originKey;
     dupCnt[originKey] = 1;
   } else {

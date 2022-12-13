@@ -2,6 +2,7 @@ import { ExportMode, PaintOption } from '../@types/index';
 import {
   checkDuplicatedName,
   checkEmptyObject,
+  commentMapper,
   getDepthName,
   getRGBA,
   getVariableName,
@@ -43,12 +44,12 @@ export function parsePaintStyle(
   if (mode === 'css') {
     arr.forEach((el) => {
       let originKey = getDepthName(el.name);
-      let key = checkDuplicatedName(originKey, codeObj, dupCnt);
+      let key = checkDuplicatedName(originKey, dupCnt);
 
       el.paints.forEach((paint: any, idx: number) => {
         el.paints.length <= 1
-          ? (codeObj[`${key}`] = getColor(paint, option))
-          : (codeObj[`${key}-${idx}`] = getColor(paint, option));
+          ? (codeObj[`--${key}`] = getColor(paint, option))
+          : (codeObj[`--${key}-${idx}`] = getColor(paint, option));
       });
     });
   } else if (mode === 'object') {
@@ -56,8 +57,7 @@ export function parsePaintStyle(
       let path = getVariableName(el.name).split('/');
       let cur = codeObj;
       path.forEach((originKey: any, i: number) => {
-        let key = checkDuplicatedName(originKey, codeObj, dupCnt);
-
+        let key = checkDuplicatedName(originKey, dupCnt);
         if (i === path.length - 1) {
           if (el.paints.length <= 1) {
             cur[key] = getColor(el.paints[0], option);
@@ -76,7 +76,7 @@ export function parsePaintStyle(
   } else if (mode === 'scss') {
     arr.forEach((el) => {
       let originKey = getDepthName(el.name);
-      let key = checkDuplicatedName(originKey, codeObj, dupCnt);
+      let key = checkDuplicatedName(originKey, dupCnt);
       el.paints.forEach((paint: any, idx: number) => {
         el.paints.length <= 1
           ? (codeObj[`$${key}`] = getColor(paint, option))
@@ -85,10 +85,12 @@ export function parsePaintStyle(
     });
   }
   let code = JSON.stringify(codeObj, null, 2);
-  if (mode === 'css' || mode === 'scss') {
-    code = replaceToStyleCode(code);
+  if (mode === 'css') {
+    code = ':root' + replaceToStyleCode(code);
+  } else if (mode === 'scss') {
+    code = replaceToStyleCode(code).replace(/[{}]/g, '');
   }
   return arr.length
-    ? `//paint style \n ${code}\n`
-    : `//no assigned global paint code\n`; // space 2, replacer null
+    ? `${commentMapper('paint style', mode)} \n ${code}\n`
+    : `${commentMapper('no assigned global paint code', mode)}\n`;
 }

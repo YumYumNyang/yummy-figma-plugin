@@ -12,14 +12,22 @@
 }
 
 #code {
+  background: #1e1e1e;
   border: 1px solid #2300be;
   width: 100%;
-  min-height: 300px;
+  height: 300px;
+  overflow: auto;
   display: flex;
-  background: #2c2c2c;
-  color: #fff;
-  font-family: "Ubuntu mono";
-  resize: vertical;
+  flex-direction: column;
+}
+pre {
+  display: flex;
+}
+pre code {
+  width: -moz-fit-content;
+  width: fit-content;
+  overflow-x: unset !important;
+  white-space: pre;
 }
 
 .check-box {
