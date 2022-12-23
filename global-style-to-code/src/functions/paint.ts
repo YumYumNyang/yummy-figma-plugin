@@ -91,6 +91,6 @@ export function parsePaintStyle(
     code = replaceToStyleCode(code).replace(/[{}]/g, '');
   }
   return arr.length
-    ? `${commentMapper('paint style', mode)} \n ${code}\n`
+    ? `${commentMapper('paint style', mode)} \n${code}\n`
     : `${commentMapper('no assigned global paint code', mode)}\n`;
 }

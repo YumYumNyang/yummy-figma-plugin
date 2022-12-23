@@ -58,6 +58,6 @@ export function parseEffectStyle(arr: EffectStyle[], mode: string) {
   }
 
   return arr.length
-    ? `${commentMapper('effect style', mode)} \n ${code}\n`
+    ? `${commentMapper('effect style', mode)} \n${code}\n`
     : `${commentMapper('no assigned global effect code', mode)}\n`;
 }

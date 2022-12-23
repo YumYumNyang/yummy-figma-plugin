@@ -90,6 +90,6 @@ export function parseTextStyle(arr: TextStyle[], mode: string) {
   }
 
   return arr.length
-    ? `${commentMapper('text style', mode)} \n ${code}\n`
+    ? `${commentMapper('text style', mode)} \n${code}\n`
     : `${commentMapper('no assigned global text code', mode)}\n`;
 }
