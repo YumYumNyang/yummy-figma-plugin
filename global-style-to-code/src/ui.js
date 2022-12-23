@@ -17,7 +17,7 @@ onmessage = (event) => {
   hljs.highlightAll();
 };
 
-document.querySelectorAll('input[type=checkbox]').forEach((el) => {
+document.querySelectorAll('input[type=radio]').forEach((el) => {
   el.addEventListener('click', () => {
     const container = el.closest('span');
     const id = container.id;
@@ -33,15 +33,11 @@ document.querySelectorAll('input[type=checkbox]').forEach((el) => {
   });
 });
 
-document.querySelectorAll('input[type=radio]').forEach((el) => {
-  el.addEventListener('click', () => {
-    if (el.checked) {
-      parent.postMessage(
-        { pluginMessage: { type: 'paint-option', id: el.id } },
-        '*'
-      );
-    }
-  });
+document.querySelector('select.color-mode').addEventListener('change', () => {
+  parent.postMessage(
+    { pluginMessage: { type: 'paint-option', id: this.value } },
+    '*'
+  );
 });
 
 document.querySelectorAll('select.mode').forEach((select) => {

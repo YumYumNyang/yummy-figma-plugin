@@ -1,19 +1,18 @@
 * {
   color: #2c2c2c;
-  accent-color: #2300be;
-  font-family: "Poppins", sans-serif;
+  accent-color: #2d30ff;
+  font-family: 'Inter', sans-serif;
 }
 
 .plugin-body {
-  background-color: rgb(237, 237, 237);
-  margin: 8px 16px;
+  margin: 0;
+  padding: 24px;
   display: flex;
   flex-direction: column;
 }
 
 #code {
   background: #1e1e1e;
-  border: 1px solid #2300be;
   width: 100%;
   height: 300px;
   overflow: auto;
@@ -31,42 +30,57 @@ pre code {
 }
 
 .check-box {
-  margin: 8px 0;
   display: flex;
   flex-direction: column;
 }
 
 .input-box {
   display: flex;
-  margin-top: 8px;
-  align-items: center;
+  flex-direction: column;
+  padding: 0 10px;
 }
 
 .button-box {
   display: flex;
-  width: 100%;
-  justify-content: space-around;
-  margin: 8px 0;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px 10px;
+  gap: 20px;
+  margin-top: 20px;
 }
 
-h3 {
-  font-family: "Rubik Mono One", sans-serif;
+.title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 28px;
+  color: #2c2c2c;
+  margin: 0 0 20px 0;
+  font-weight: 700;
 }
-h4 {
-  margin: 8px 0;
+.question {
+  margin: 20px 0;
+  padding: 0 10px;
+  font-size: 20px;
+  line-height: 24px;
+  color: #2c2c2c;
 }
 
 button {
-  color: #fff;
-  background-color: #2300be;
-  width: 168px;
-  height: 40px;
-  outline: none;
-  font-size: 16px;
-  margin: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #2c2c2c;
   border-radius: 10px;
-  cursor: pointer;
+  color: #2c2c2c;
+  height: 48px;
+  background-color: #fff;
+  font-size: 16px;
+}
+#copy {
+  width: 235px;
+}
+#cancel {
+  width: 157px;
 }
 
 #toast {
@@ -93,14 +107,23 @@ button {
 
 #convert span {
   display: flex;
-  flex-direction: column;
-  height: 65px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 10px;
+  gap: 8px;
 }
 
-.mode {
-  margin: 8px 0;
-  opacity: 0;
-  transition: all 0.3s ease;
-  width: 80%;
-  height: 24px;
+select {
+  display: flex;
+  align-items: center;
+  width: 160px;
+  height: 33px;
+  margin: 0;
+  border: 1px solid #2c2c2c;
+  border-radius: 8px;
+}
+option {
+  height: 33px;
 }
