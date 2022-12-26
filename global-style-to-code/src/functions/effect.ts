@@ -1,5 +1,6 @@
 import {
   checkDuplicatedName,
+  commentMapper,
   getDepthName,
   getRGBA,
   replaceToStyleCode,
@@ -34,7 +35,7 @@ export function parseEffectStyle(arr: EffectStyle[], mode: string) {
     style['box-shadow'] = style['box-shadow'].join(', ');
 
     const originKey = getDepthName(effectStyle.name);
-    const key = checkDuplicatedName(originKey, codeObj, dupCnt);
+    const key = checkDuplicatedName(originKey, dupCnt);
     codeObj[key] = style;
   });
 
@@ -57,6 +58,6 @@ export function parseEffectStyle(arr: EffectStyle[], mode: string) {
   }
 
   return arr.length
-    ? `//effect style \n ${code}\n`
-    : `//no assigned global effect code\n`;
+    ? `${commentMapper('effect style', mode)} \n${code}\n`
+    : `${commentMapper('no assigned global effect code', mode)}\n`;
 }

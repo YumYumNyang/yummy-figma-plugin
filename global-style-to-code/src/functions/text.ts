@@ -1,5 +1,10 @@
 import { TextStyling } from './class';
-import { checkDuplicatedName, getDepthName, replaceToStyleCode } from './utils';
+import {
+  checkDuplicatedName,
+  commentMapper,
+  getDepthName,
+  replaceToStyleCode,
+} from './utils';
 const textStyleMapper = {
   textDecoration: {
     ['UNDERLLINE']: 'underline',
@@ -62,7 +67,7 @@ export function parseTextStyle(arr: TextStyle[], mode: string) {
       style['text-transform'] = textStyleMapper['textCase'][textStyle.textCase];
 
     const originKey = getDepthName(textStyle.name);
-    const key = checkDuplicatedName(originKey, codeObj, dupCnt);
+    const key = checkDuplicatedName(originKey, dupCnt);
     codeObj[key] = style;
   });
 
@@ -85,6 +90,6 @@ export function parseTextStyle(arr: TextStyle[], mode: string) {
   }
 
   return arr.length
-    ? `//text style \n ${code}\n`
-    : `//no assigned global text code\n`;
+    ? `${commentMapper('text style', mode)} \n${code}\n`
+    : `${commentMapper('no assigned global text code', mode)}\n`;
 }

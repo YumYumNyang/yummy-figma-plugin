@@ -1,8 +1,8 @@
 {
-	"name": "global-style-to-code",
-	"id": "1143791863042221668",
-	"api": "1.0.0",
-	"main": "dist/code.js",
-	"editorType": ["figma"],
-	"ui": "dist/ui.html"
+  "name": "global-style-to-code",
+  "id": "1143791863042221668",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "editorType": ["figma"],
+  "ui": "dist/ui.html"
 }
