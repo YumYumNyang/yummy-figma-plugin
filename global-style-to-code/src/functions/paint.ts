@@ -88,7 +88,9 @@ export function parsePaintStyle(
   if (mode === 'css') {
     code = ':root' + replaceToStyleCode(code);
   } else if (mode === 'scss') {
-    code = replaceToStyleCode(code).replace(/[{}]/g, '');
+    code = replaceToStyleCode(code)
+      .replace(/[{}]/g, '')
+      .replace(/\n\s\s/g, '\n');
   }
   return arr.length
     ? `${commentMapper('paint style', mode)} \n${code}\n`

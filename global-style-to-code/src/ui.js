@@ -10,32 +10,27 @@ onmessage = (event) => {
     if (style.visible) {
       codeBox.className = `language-${style.lang}`;
       codeBox.textContent = style.code;
+      hljs.highlightElement(codeBox);
     } else {
       codeBox.textContent = '';
     }
   });
-  hljs.highlightAll();
 };
 
-document.querySelectorAll('input[type=radio]').forEach((el) => {
+document.querySelectorAll('input[type=checkbox]').forEach((el) => {
   el.addEventListener('click', () => {
     const container = el.closest('span');
     const id = container.id;
-    const select = container.querySelector('.mode');
-    if (el.checked) {
-      select.style.height = '100%';
-      select.style.opacity = 1;
-    } else {
-      select.style.height = 0;
-      select.style.opacity = 0;
-    }
+
     parent.postMessage({ pluginMessage: { type: 'style', id: id } }, '*');
   });
 });
 
-document.querySelector('select.color-mode').addEventListener('change', () => {
+const colorMode = document.querySelector('select.color-mode');
+
+colorMode.addEventListener('change', () => {
   parent.postMessage(
-    { pluginMessage: { type: 'paint-option', id: this.value } },
+    { pluginMessage: { type: 'paint-option', id: colorMode.value } },
     '*'
   );
 });
@@ -79,9 +74,7 @@ function copyTextToClipboard() {
 
   try {
     const successful = document.execCommand('copy');
-    const msg = successful
-      ? 'successfully copied! d(=^･ω･^=)b'
-      : 'error occured (=ＴェＴ=) ';
+    const msg = successful ? 'successfully copied' : 'error occured';
 
     toast.style.opacity = 1;
     toast.innerHTML = msg;
@@ -90,7 +83,7 @@ function copyTextToClipboard() {
     }, 1000);
   } catch (err) {
     toast.style.opacity = 1;
-    toast.innerHTML = 'error occured (=ＴェＴ=) ';
+    toast.innerHTML = 'error occured';
 
     console.error(err);
   }
