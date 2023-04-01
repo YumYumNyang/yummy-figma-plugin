@@ -1,6 +1,6 @@
 # yummy figma plugin 
 
-![profile banner](https://user-images.githubusercontent.com/56557862/209547312-f71c252f-53bc-4814-868a-fbf57418d6eb.png)
+![profile banner](https://user-images.githubusercontent.com/56557862/229273760-86b6797f-4d66-4d78-a912-9ee7934c79a2.png)
 
 ## <a href="https://www.figma.com/community/plugin/1143791863042221668/global-style-to-code">global style to code</a>
 Global Style To Code enables developers to quickly convert global styles (text, paint, and effect) to code. 
