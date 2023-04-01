@@ -32,9 +32,9 @@ export function replaceToStyleCode(code: string) {
 }
 
 export function getRGBA(color: RGB | RGBA, opacity?: number) {
-  const r = Math.floor(color.r * 255);
-  const g = Math.floor(color.g * 255);
-  const b = Math.floor(color.b * 255);
+  const r = Math.round(color.r * 255);
+  const g = Math.round(color.g * 255);
+  const b = Math.round(color.b * 255);
   const a = opacity ? round(opacity) : 1;
   return [r, g, b, a];
 }
