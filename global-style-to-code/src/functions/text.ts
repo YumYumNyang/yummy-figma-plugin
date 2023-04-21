@@ -49,16 +49,28 @@ export function parseTextStyle(arr: TextStyle[], mode: string) {
         if (mappedWeight) style['font-weight'] = mappedWeight;
       }
     });
+    /**
+     * type LetterSpacing = {
+     * readonly value: number
+     * readonly unit: "PIXELS" | "PERCENT"
+     */
     style['letter-spacing'] =
       textStyle.letterSpacing.unit === 'PIXELS'
-        ? `${textStyle.letterSpacing.value}px`
-        : `${textStyle.letterSpacing.value / 100}em`;
-
+        ? `${textStyle.letterSpacing.value}px` // Letter Spacing PIXEL
+        : `${textStyle.letterSpacing.value / 100}em`; // Letter Spacing Percent
+    /**
+     * type LineHeight = {
+     *  readonly value: number
+     *  readonly unit: "PIXELS" | "PERCENT"
+     *  } | {
+     *  readonly unit: "AUTO"
+     * }
+     */
     if (textStyle.lineHeight.unit !== 'AUTO') {
       style['line-height'] =
-        textStyle.letterSpacing.unit === 'PIXELS'
-          ? `${textStyle.letterSpacing.value}px`
-          : `${textStyle.letterSpacing.value}px`;
+        textStyle.lineHeight.unit === 'PIXELS'
+          ? `${textStyle.lineHeight.value}px` // LineHeight PIXEL
+          : `${textStyle.lineHeight.value}%`; // LineHeight Percent
     }
 
     if (textStyle.paragraphIndent != 0)

@@ -13,6 +13,7 @@
     "emitDeclarationOnly": true,
     "outDir": "dist",
     "declarationMap": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0"
   }
 }
